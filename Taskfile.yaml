@@ -25,7 +25,7 @@ tasks:
     desc: 🧪 Run the tests
     cmds:
       - echo "🧪 Running the tests"
-      - uv run coverage run -m pytest $TESTDIR $SRCDIR
+      - uv run pytest --cov --cov-report=html --cov-report=term --cov-report xml:.coverage.xml
 
   copyright:
     aliases: [license]

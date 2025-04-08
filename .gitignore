@@ -6,8 +6,9 @@ dist/
 wheels/
 *.egg-info
 .python-version
-src/datarobot_pulumi_utils/_version.py
+src/datarobot_asgi_middleware/_version.py
 .coverage
+.coverage.xml
 
 # Virtual environments
 .venv

@@ -39,7 +39,7 @@ vcs = "git"
 style = "pep440"
 
 [tool.hatch.build.hooks.version]
-path = "src/datarobot_pulumi_utils/_version.py"
+path = "src/datarobot_asgi_middleware/_version.py"
 template = '''
 version = "{version}"
 '''
