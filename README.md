@@ -31,11 +31,11 @@ Doing so will enable the automatic URLs such as `docs/` and
 
 If you'd like to do proper Kubernetes health checks to let DataRobot
 know your application is healthy, the middleware adds a way to tell
-DataRobot to use a `/health` endpoint to validate that your app is
+DataRobot to use a specific health URL endpoint like:`/health`to validate your app is
 working as expected using
 [kube-probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
-So, similar to the example above, but this time with `use_health=True`:
+So, similar to the example above, but this time with `health_endpoint="/health"`:
 
 ```python
 from fastapi import FastAPI
@@ -44,7 +44,7 @@ from datarobot_asgi_middleware import DataRobotASGIMiddleware
 
 
 app = FastAPI()
-app.add_middleware(DataRobotASGIMiddleware, use_health=True)
+app.add_middleware(DataRobotASGIMiddleware, health_endpoint="/health")
 
 
 @app.get("/")
