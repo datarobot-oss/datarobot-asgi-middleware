@@ -39,7 +39,7 @@ def app(request):
 
 def test_kubernetes_probe_redirect(app):
     # Add our middleware
-    app.add_middleware(DataRobotASGIMiddleware, use_health=True)
+    app.add_middleware(DataRobotASGIMiddleware, health_endpoint="/health")
 
     # Create a test client
     client = TestClient(app)

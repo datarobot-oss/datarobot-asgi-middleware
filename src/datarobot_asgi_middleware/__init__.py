@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+from typing import Optional
 
 from starlette.types import ASGIApp, Receive, Scope, Send
 
@@ -25,9 +26,9 @@ class DataRobotASGIMiddleware:
     more robust health checks than just loading the root URL.
     """
 
-    def __init__(self, app: ASGIApp, use_health: bool = False):
+    def __init__(self, app: ASGIApp, health_endpoint: Optional[str] = None):
         self.app = app
-        self.use_health = use_health
+        self.health_endpoint = health_endpoint
         # Get the script name from the environment variable to know what the internal
         # load balancer is using as the prefix for the request.
         self.internal_prefix = os.getenv("SCRIPT_NAME", None)
@@ -41,8 +42,8 @@ class DataRobotASGIMiddleware:
         user_agent = headers.get(b"user-agent", b"").decode("utf-8")
 
         # Send Kubernetes probe requests to /health for real health checks
-        if self.use_health and user_agent.startswith("kube-probe"):
-            scope["path"] = "/health"
+        if self.health_endpoint is not None and user_agent.startswith("kube-probe"):
+            scope["path"] = self.health_endpoint
             scope["root_path"] = ""
             return await self.app(scope, receive, send)
 

@@ -1,0 +1,34 @@
+[http]
+  [http.middlewares]
+    [http.middlewares.strip-front-prefix.stripPrefix]
+      prefixes = ["/front-proxy"]
+    
+    [http.middlewares.add-back-prefix.addPrefix]
+      prefix = "/back-proxy"
+    
+    [http.middlewares.set-forwarded-prefix.headers]
+      customRequestHeaders = { X-Forwarded-Prefix = "/front-proxy" }
+
+  [http.routers]
+    [http.routers.front-proxy]
+      entryPoints = ["http"]
+      service = "back-proxy"
+      rule = "PathPrefix(`/front-proxy`)"
+      middlewares = ["strip-front-prefix", "add-back-prefix"]
+
+    [http.routers.back-proxy]
+      entryPoints = ["http"]
+      service = "app"
+      rule = "PathPrefix(`/back-proxy`)"
+      middlewares = ["set-forwarded-prefix"]
+
+  [http.services]
+    [http.services.back-proxy]
+      [http.services.back-proxy.loadBalancer]
+        [[http.services.back-proxy.loadBalancer.servers]]
+          url = "http://traefik:9999"
+
+    [http.services.app]
+      [http.services.app.loadBalancer]
+        [[http.services.app.loadBalancer.servers]]
+          url = "http://app:8000"

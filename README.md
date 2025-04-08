@@ -71,76 +71,10 @@ You can run tests, linters, etc. by setting these two up to work together
 
 ### Testing realistically with Traefic
 
-To test through a DataRobot-like proxy:
+To test through a DataRobot-like proxy the `examples/basic` folder it contains a basic app and traefik configuration
+to start up with `docker-compose -f examples/basic/docker-compose.yml up`  from the repo root folder, and validate by going to `http://localhost:9999/front-proxy` or run the baked-in task for it with:
 
-Install traefik by downloading from: https://github.com/traefik/traefik/releases
-
-
-Configure it with `traefik.toml` like:
-
-```toml
-[entryPoints]
-  [entryPoints.http]
-    address = ":9999"
-
-[providers]
-  [providers.file]
-    filename = "routes.toml"
-
-[log]
-  level = "DEBUG"
-```
-
-Create a `routes.toml` file like:
-
-```toml
-[http]
-  [http.middlewares]
-    [http.middlewares.strip-front-prefix.stripPrefix]
-      prefixes = ["/front-proxy"]
-    
-    [http.middlewares.add-back-prefix.addPrefix]
-      prefix = "/back-proxy"
-    
-    [http.middlewares.set-forwarded-prefix.headers]
-      customRequestHeaders = { X-Forwarded-Prefix = "/front-proxy" }
-
-  [http.routers]
-    [http.routers.front-proxy]
-      entryPoints = ["http"]
-      service = "back-proxy"
-      rule = "PathPrefix(`/front-proxy`)"
-      middlewares = ["strip-front-prefix", "add-back-prefix"]
-
-    [http.routers.back-proxy]
-      entryPoints = ["http"]
-      service = "app"
-      rule = "PathPrefix(`/back-proxy`)"
-      middlewares = ["set-forwarded-prefix"]
-
-  [http.services]
-    [http.services.back-proxy]
-      [http.services.back-proxy.loadBalancer]
-        [[http.services.back-proxy.loadBalancer.servers]]
-          url = "http://127.0.0.1:9999"
-
-    [http.services.app]
-      [http.services.app.loadBalancer]
-        [[http.services.app.loadBalancer.servers]]
-          url = "http://127.0.0.1:8000"
-
-```
-
-
-And run locally with:
-
-`traefik --configFile=traefik.toml`
-
-With the fastapi running now accessing:
-
-http://localhost:9999/front-proxy
-
-will take you to a proxy compatible installation.
+`task run-example-basic`
 
 Technically DataRobot does a double front-proxy for applications, so
 this configuration mimics the double proxy with one traefic instance.

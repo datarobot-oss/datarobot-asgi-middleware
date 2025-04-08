@@ -27,6 +27,12 @@ tasks:
       - echo "🧪 Running the tests"
       - uv run pytest --cov --cov-report=html --cov-report=term --cov-report xml:.coverage.xml
 
+  run-example-basic:
+    desc: ▶️ Run the example-basic package
+    cmds:
+      - echo "▶️ Running the Basic Example. Visit http://localhost:9999/front-proxy/docs to see the result"
+      - docker-compose -f examples/basic/docker-compose.yml up --build
+
   copyright:
     aliases: [license]
     desc: 📜 Apply license headers

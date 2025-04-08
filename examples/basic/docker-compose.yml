@@ -1,0 +1,29 @@
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./routes.toml:/etc/traefik/routes.toml
+    networks:
+      - proxy-network
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ../../
+      dockerfile: examples/basic/Dockerfile
+    container_name: fastapi-app
+    environment:
+      - SCRIPT_NAME=/back-proxy
+    ports:
+      - "8000:8000"
+    networks:
+      - proxy-network
+    restart: unless-stopped
+
+networks:
+  proxy-network:
+    driver: bridge
