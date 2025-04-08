@@ -16,7 +16,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.testclient import TestClient
-from datarobot_asgi_middleware import DataRobotASGIMiddleWare
+from datarobot_asgi_middleware import DataRobotASGIMiddleware
 
 @pytest.fixture
 def app(request):
@@ -39,7 +39,7 @@ def app(request):
 
 def test_kubernetes_probe_redirect(app):
     # Add our middleware
-    app.add_middleware(DataRobotASGIMiddleWare, use_health=True)
+    app.add_middleware(DataRobotASGIMiddleware, use_health=True)
 
     # Create a test client
     client = TestClient(app)
@@ -63,7 +63,7 @@ def test_kubernetes_probe_redirect(app):
 
 def test_normal_request(app):
     # Add our middleware
-    app.add_middleware(DataRobotASGIMiddleWare)
+    app.add_middleware(DataRobotASGIMiddleware)
 
     # Create a test client
     client = TestClient(app)
@@ -78,7 +78,7 @@ def test_normal_request(app):
 
 def test_proxy_request(app):
     # Add our middleware
-    app.add_middleware(DataRobotASGIMiddleWare)
+    app.add_middleware(DataRobotASGIMiddleware)
 
     # Create a test client
     client = TestClient(app)
@@ -97,7 +97,7 @@ def test_proxy_request(app):
 def test_internal_load_balancer_request(app, monkeypatch):
     # Mock the SCRIPT_NAME environment variable
     monkeypatch.setenv("SCRIPT_NAME", "/apps/67f3e8ac039772f090878752")
-    app.add_middleware(DataRobotASGIMiddleWare)
+    app.add_middleware(DataRobotASGIMiddleware)
 
     # Create a test client
     client = TestClient(app)
@@ -115,7 +115,7 @@ def test_internal_load_balancer_request(app, monkeypatch):
 def test_combined_internal_and_external_prefix(app, monkeypatch):
     # Mock the SCRIPT_NAME environment variable
     monkeypatch.setenv("SCRIPT_NAME", "/apps/67f3e8ac039772f090878752")
-    app.add_middleware(DataRobotASGIMiddleWare)
+    app.add_middleware(DataRobotASGIMiddleware)
 
     # Create a test client
     client = TestClient(app)
@@ -142,7 +142,7 @@ def test_static_files_with_external_proxy(app, tmp_path):
     app.mount("/assets", StaticFiles(directory=str(static_dir)), name="static")
 
     # Add our middleware
-    app.add_middleware(DataRobotASGIMiddleWare)
+    app.add_middleware(DataRobotASGIMiddleware)
     middleware = app.middleware("http")
 
     # Create a test client
@@ -176,7 +176,7 @@ def test_static_files_with_internal_prefix(app, tmp_path, monkeypatch):
     app.mount("/assets", StaticFiles(directory=str(static_dir)), name="static")
 
     # Add our middleware
-    app.add_middleware(DataRobotASGIMiddleWare)
+    app.add_middleware(DataRobotASGIMiddleware)
 
     # Create a test client
     client = TestClient(app)

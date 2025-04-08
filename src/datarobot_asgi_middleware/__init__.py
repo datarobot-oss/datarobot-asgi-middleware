@@ -17,7 +17,7 @@ import os
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 
-class DataRobotASGIMiddleWare:
+class DataRobotASGIMiddleware:
     """
     Middleware to augment ASGI applications run by DataRobot Custom Applications.
 

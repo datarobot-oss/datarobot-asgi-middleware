@@ -12,10 +12,10 @@ Simply add to your FastAPI application that you expect to run in DataRobot
 ```python
 from fastapi import FastAPI
 
-from datarobot_asgi_middleware import DataRobotASGIMiddleWare
+from datarobot_asgi_middleware import DataRobotASGIMiddleware
 
 app = FastAPI()
-app.add_middleware(DataRobotASGIMiddleWare)
+app.add_middleware(DataRobotASGIMiddleware)
 
 
 @app.get("/")
@@ -40,11 +40,11 @@ So, similar to the example above, but this time with `use_health=True`:
 ```python
 from fastapi import FastAPI
 
-from datarobot_asgi_middleware import DataRobotASGIMiddleWare
+from datarobot_asgi_middleware import DataRobotASGIMiddleware
 
 
 app = FastAPI()
-app.add_middleware(DataRobotASGIMiddleWare, use_health=True)
+app.add_middleware(DataRobotASGIMiddleware, use_health=True)
 
 
 @app.get("/")
