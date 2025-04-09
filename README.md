@@ -55,7 +55,7 @@ async def root():
 @app.get("/health")
 async def health():
     # Check on database connections, memory utilization, etc. If it returns
-    # any error code like a 404 or 500, the app is marked as unhealth
+    # any error code like a 404 or 500, the app is marked as unhealthy
     return {"status": "healthy"}
 ```
 
