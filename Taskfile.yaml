@@ -12,6 +12,7 @@ tasks:
       - uv run ruff format $SRCDIR
       - uv run ruff check --fix $SRCDIR
       - uv run mypy --pretty $SRCDIR
+      - uv run pytest --monkeytype-output=.monkeytype.sqlite3 && uv run monkeytype stub datarobot_asgi_middleware
 
   lint-check:
     desc: 🧹 Check whether the codebase is linted
@@ -25,6 +26,7 @@ tasks:
     desc: 🧪 Run the tests
     cmds:
       - echo "🧪 Running the tests"
+      - uv run stubtest datarobot_asgi_middleware
       - uv run pytest --cov --cov-report=html --cov-report=term --cov-report xml:.coverage.xml
 
   run-example-basic:

@@ -9,6 +9,7 @@ wheels/
 src/datarobot_asgi_middleware/_version.py
 .coverage
 .coverage.xml
+.monkeytype.sqlite3
 
 # Virtual environments
 .venv
