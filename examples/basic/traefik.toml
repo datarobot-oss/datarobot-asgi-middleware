@@ -1,0 +1,11 @@
+[entryPoints]
+  [entryPoints.http]
+    address = ":9999"
+
+[providers]
+  [providers.file]
+    filename = "/etc/traefik/routes.toml"
+
+[log]
+  level = "DEBUG"
+
