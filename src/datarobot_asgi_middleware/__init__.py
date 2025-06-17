@@ -55,13 +55,13 @@ class DataRobotASGIMiddleware:
         if x_forwarded_prefix:
             # Getting a request originating from the external load balancer.
             scope["root_path"] = x_forwarded_prefix + scope["root_path"]
-            if not scope["path"].startswith(x_forwarded_prefix) and not self.internal_prefix:
-                # The path does not start with the x-forwarded-prefix, so we need to rewrite it.
-                scope["path"] = x_forwarded_prefix + scope["path"]
+
             if self.internal_prefix and scope["path"].startswith(self.internal_prefix):
-                # But it is getting proxied through the internal load balancer, so we need to
-                # rewrite the path to match the external load balancer.
+                # Replace internal prefix with external prefix
                 scope["path"] = scope["path"].replace(self.internal_prefix, x_forwarded_prefix, 1)
+            elif not scope["path"].startswith(x_forwarded_prefix):
+                # Add external prefix to path
+                scope["path"] = x_forwarded_prefix + scope["path"]
             return await self.app(scope, receive, send)
 
         return await self.app(scope, receive, send)
