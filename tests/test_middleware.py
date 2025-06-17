@@ -161,6 +161,14 @@ def test_static_files_with_external_proxy(app, tmp_path):
     assert response.status_code == 200
     assert response.text == "test content"
 
+   # Access through external proxy with prefix
+    response = client.get(
+        "/assets/test.txt",
+        headers={"x-forwarded-prefix": "/custom_applications/67f3e8ac039772f090878752"}
+    )
+    assert response.status_code == 200
+    assert response.text == "test content"
+
 
 def test_static_files_with_internal_prefix(app, tmp_path, monkeypatch):
     # Set up the internal prefix via SCRIPT_NAME
