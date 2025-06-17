@@ -1,6 +1,6 @@
 [project]
 name = "datarobot-asgi-middleware"
-version = "0.1.0"
+version = "0.2.0"
 description = "A FastAPI/ASGI middleware to simplify development of FastAPI apps on DataRobot"
 readme = "README.md"
 maintainers = [
